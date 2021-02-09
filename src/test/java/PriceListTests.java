@@ -3,13 +3,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-
-//import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PriceListTest {
 
-    // HashMap<Integer, Product> map2 = new HashMap<Integer, Product>(23, new Product(), 33, new Product());
+    //HashMap<Integer, Product> map2 = new HashMap<Integer, Product>(23, new Product(), 33, new Product());
 
     PriceList map = new PriceList(new HashMap<>(Map.of(
             23, new Product("Сыр", 23, 11990),
