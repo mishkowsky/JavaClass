@@ -34,6 +34,7 @@ class Product {
 
     Product(String name, int code, int price) {
         if (price < 0) throw new NumberFormatException("Неверное значение цены.");
+        if (code < 0) throw new NumberFormatException("Неверное значение кода.");
         this.name = name;
         this.code = code;
         this.price = price;
@@ -141,6 +142,4 @@ class PriceList {
         }
         return sb.toString();
     }
-
 }
-

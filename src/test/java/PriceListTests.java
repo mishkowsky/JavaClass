@@ -18,8 +18,9 @@ class PriceListTest {
                 23, new Product("Сыр", 23, 11990),
                 24, new Product("Колбаса", 24, 22050),
                 25, new Product("Варенье", 25, 6970)))));
-
         assertThrows(IllegalArgumentException.class, () -> map.add(new Product("Арбуз", 23, 7490)));
+        assertThrows(IllegalArgumentException.class, () -> map.add(new Product("Арбуз", -23, 7490)));
+        assertThrows(IllegalArgumentException.class, () -> map.add(new Product("Арбуз", 23, -7490)));
     }
 
     @Test
@@ -62,8 +63,10 @@ class PriceListTest {
     }
 
     @Test
-    void get() {
+    void getters() {
         assertEquals(new Product("Колбаса", 24, 22050), map.get(24));
         assertThrows(IllegalArgumentException.class, () -> map.get(0));
+        assertEquals(22050, map.get(24).getPrice());
+        assertEquals(24, map.get(24).getCode());
     }
 }
