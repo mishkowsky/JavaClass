@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PriceListTest {
 
-    //HashMap<Integer, Product> map2 = new HashMap<Integer, Product>(23, new Product(), 33, new Product());
-
     PriceList map = new PriceList(new HashMap<>(Map.of(
             23, new Product("Сыр", 23, 11990),
             24, new Product("Колбаса", 24, 22050))));
@@ -53,7 +51,6 @@ class PriceListTest {
         map.delete(23);
         assertEquals(map, new PriceList(new HashMap<>(Map.of(
                 24, new Product("Колбаса", 24, 22050)))));
-
         assertThrows(IllegalArgumentException.class, () -> map.delete(1));
     }
 
