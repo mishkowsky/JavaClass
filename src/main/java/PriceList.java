@@ -8,6 +8,8 @@
         определение цены покупки по коду и количеству экземпляров.
 */
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,12 +49,12 @@ class Product {
         return price;
     }
 
-    void changePrice(int price){
+    public void changePrice(int price){
         if (price < 0) throw new NumberFormatException("Неверное значение цены.");
         this.price = price;
     }
 
-    void changeName(String name){
+    public void changeName(String name){
         this.name = name;
     }
 
