@@ -2,8 +2,6 @@ package org.spbstu.aleksandrov;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 interface Products {
     int getCode();
     long getPriceRub();
@@ -62,7 +60,11 @@ public class Product implements Products {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, getCode(), getPriceRub(), getPriceKop());
+        int result = code;
+        result = result * 31 + Long.hashCode(priceRub);
+        result = result * 31 + priceKop;
+        result = result * 31 + name.hashCode();
+        return result;
     }
 
     @Override

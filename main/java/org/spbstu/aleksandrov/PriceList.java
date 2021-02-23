@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 interface ListOfProducts {
     Product get(Integer code);
@@ -60,7 +59,11 @@ public class PriceList implements ListOfProducts {
 
     @Override
     public int hashCode() {
-        return Objects.hash(map);
+        int result = 0;
+        for (Product product : map.values()){
+            result = result * 31 + product.hashCode();
+        }
+        return result;
     }
 
     @Override
