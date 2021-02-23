@@ -1,6 +1,9 @@
-package org.spstu.aleksandrov;
+package org.spbstu.aleksandrov;
 
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -8,18 +11,20 @@ interface ListOfProducts {
     Product get(Integer code);
     boolean add(Product product);
     Product delete(int code);
-    Integer countPrice(Map<Integer,Integer> ShoppingList);
+    String countPrice(Map<Integer,Integer> ShoppingList);
 }
 
 public class PriceList implements ListOfProducts {
 
-    public final static String emptyLstException = "Список пуст.";
-    public final static String existsException = "Товара с таким кодом не существует.";
-    private final Map<Integer, Product> map;
+    public final static String EMPTY_LIST_EXCEPTION = "Список пуст.";
+    public final static String EXISTS_EXCEPTION = "Товара с таким кодом не существует.";
+    private final Map<Integer, Product> map = new HashMap<>();
 
-    public PriceList(Map<Integer, Product> map) {
-        this.map = map;
-    }
+   public PriceList(List<Product> list) {
+       for (Product product : list) {
+           this.map.put(product.getCode(), product);
+       }
+   }
 
     public boolean add(Product product) {
         if (this.map.containsKey(product.getCode())) return false;
@@ -34,15 +39,18 @@ public class PriceList implements ListOfProducts {
         return result;
     }
 
-    public Integer countPrice(Map<Integer, Integer> shoppingList) {
-        if (shoppingList == null) throw new IllegalArgumentException(emptyLstException);
-        int result = 0;
+    public String countPrice(Map<Integer, Integer> shoppingList) {
+        if (shoppingList == null) throw new IllegalArgumentException(EMPTY_LIST_EXCEPTION);
+        int resultRub = 0;
+        int resultKop = 0;
         for (int code : shoppingList.keySet()) {
-            if (this.map.get(code) == null)
-                throw new IllegalArgumentException(existsException) ;
-            result += this.map.get(code).getPrice() * shoppingList.get(code);
+            if (this.map.get(code) == null) throw new IllegalArgumentException(EXISTS_EXCEPTION) ;
+            resultRub += this.map.get(code).getPriceRub() * shoppingList.get(code);
+            resultKop += this.map.get(code).getPriceKop() * shoppingList.get(code);
+            resultRub += resultKop / 100;
+            resultKop %= 100;
         }
-        return result;
+        return "Стоимость списка покупок: " + resultRub + " рублей " + resultKop + " копеек.";
     }
 
     @Nullable
