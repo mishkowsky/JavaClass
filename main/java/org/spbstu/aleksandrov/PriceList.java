@@ -1,9 +1,7 @@
 package org.spbstu.aleksandrov;
 
 import org.jetbrains.annotations.Nullable;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 interface ListOfProducts {
@@ -17,11 +15,15 @@ public class PriceList implements ListOfProducts {
 
     public final static String EMPTY_LIST_EXCEPTION = "Список пуст.";
     public final static String EXISTS_EXCEPTION = "Товара с таким кодом не существует.";
+    public final static String CODE_MISMATCH_EXCEPTION = "Введенный код не соответствует коду товара.";
+    public final static String AMOUNT_EXCEPTION = "Количество товаров не должно быть отрицательным.";
+
     private final Map<Integer, Product> map = new HashMap<>();
 
-   public PriceList(List<Product> list) {
-       for (Product product : list) {
-           this.map.put(product.getCode(), product);
+   public PriceList(Map<Integer, Product> sourceMap) {
+       for (Integer code : sourceMap.keySet()) {
+           if (code != sourceMap.get(code).getCode()) throw new IllegalArgumentException(CODE_MISMATCH_EXCEPTION);
+           this.map.put(code, sourceMap.get(code));
        }
    }
 
@@ -43,7 +45,8 @@ public class PriceList implements ListOfProducts {
         int resultRub = 0;
         int resultKop = 0;
         for (int code : shoppingList.keySet()) {
-            if (this.map.get(code) == null) throw new IllegalArgumentException(EXISTS_EXCEPTION) ;
+            if (shoppingList.get(code) < 0) throw new IllegalArgumentException(AMOUNT_EXCEPTION);
+            if (this.map.get(code) == null) throw new IllegalArgumentException(EXISTS_EXCEPTION);
             resultRub += this.map.get(code).getPriceRub() * shoppingList.get(code);
             resultKop += this.map.get(code).getPriceKop() * shoppingList.get(code);
             resultRub += resultKop / 100;

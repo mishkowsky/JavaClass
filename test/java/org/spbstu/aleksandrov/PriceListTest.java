@@ -1,7 +1,6 @@
 package org.spbstu.aleksandrov;
 
 import org.junit.jupiter.api.Test;
-import java.util.List;
 import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,9 +8,9 @@ class PriceListTest {
 
     Product product = new Product("Сыр", 20, 400, 0);
 
-    PriceList map = new PriceList(List.of(
-            new Product("Масло", 21, 119, 90),
-            new Product("Колбаса", 22, 220, 50)));
+    PriceList map = new PriceList(Map.of(
+            21, new Product("Масло", 21, 119, 90),
+            22, new Product("Колбаса", 22, 220, 50)));
 
     @Test
     void add() {
@@ -24,6 +23,8 @@ class PriceListTest {
         assertTrue(product.changePrice(100, 0));
         assertFalse(product.changePrice(-100, 0));
         assertFalse(product.changePrice(100, 100));
+        assertFalse(product.changePrice(-100, 100));
+
     }
 
     @Test
@@ -35,8 +36,8 @@ class PriceListTest {
     @Test
     void delete() {
         assertEquals(new Product("Масло", 21, 119, 90), map.delete(21));
-        map.delete(21);
-        assertEquals(map, new PriceList(List.of(new Product("Колбаса", 22, 220, 50))));
+        assertEquals(map, new PriceList(Map.of(
+                22, new Product("Колбаса", 22, 220, 50))));
         assertNull(map.delete(1));
     }
 
@@ -47,12 +48,15 @@ class PriceListTest {
         assertEquals("Стоимость списка покупок: 0 рублей 0 копеек.",
                 map.countPrice(Map.of()));
         assertThrows(IllegalArgumentException.class, () -> map.countPrice(null));
+        assertThrows(IllegalArgumentException.class, () -> map.countPrice(Map.of(21, 2, 22, -3)));
+        assertThrows(IllegalArgumentException.class, () -> map.countPrice(Map.of(0, 2, 22, 3)));
     }
 
     @Test
     void getters() {
         assertEquals(new Product("Колбаса", 22, 220, 50), map.get(22));
         assertNull(map.get(0));
+        assertEquals("Сыр", product.getName());
         assertEquals(400, product.getPriceRub());
         assertEquals(0, product.getPriceKop());
         assertEquals("Стоимость: 400 рублей 0 копеек.", product.getPrice());
@@ -69,9 +73,11 @@ class PriceListTest {
 
     @Test
     void equals() {
-        assertEquals(new Product("Колбаса", 24, 220, 50),
-                new Product("Колбаса", 24, 220,50));
-        assertNotEquals(new Product("олбаса", 24, 220, 50),
-                new Product("Колбаса", 24, 220, 50));
+        assertEquals(new Product("Колбаса", 0, 165, 50),
+                new Product("Колбаса", 0, 165,50));
+        assertNotEquals(new Product("олбаса", 1, 192, 99),
+                new Product("Колбаса", 1, 192, 99));
+        assertEquals(new Product(null, 2, 20, 0),
+                new Product(null, 2, 20,0));
     }
 }
